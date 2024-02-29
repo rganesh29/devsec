@@ -16,7 +16,7 @@ pipeline{
             }
         }
 
-        stage('SCA-synk-Analysis'){
+        stage('SCA-snyk-Analysis'){
             steps{
                 script{
                     withCredentials([string(credentialsId:  'SNYK_TOKEN', variable: 'SNYK_TOKEN')]){
