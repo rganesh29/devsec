@@ -1,13 +1,13 @@
-pipeline {
-  agent any
-  tools { 
-        maven 'Maven_3_6_3'  
+pipeline{
+    agent any
+    tools{
+        maven 'Maven_'
     }
-   stages{
-    stage('CompileandRunSonarAnalysis') {
-            steps {	
-		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops321 -Dsonar.organization=devsecops321 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=57aa2e966e0e3723dfb2dd3e16ccd227ca988f18'
-			}
-        } 
-  }
+    stages{
+        stage('SonarAnalysis'){
+            steps{
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectkey=devsecops321 -Dsonar.organization=devsecops321 -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=7b28c0514caefe8081be6197282a3ac90f388fa1'
+            }
+        }
+    }
 }
