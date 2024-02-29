@@ -18,20 +18,20 @@ pipeline{
 
         stage('SCA-synk-Analysis'){
             steps{
-                withCredentials([string(credentialsId:  'SNYK_TOKEN', variable: 'SNYK_TOKEN')]){
-                    script{
+                script{
+                    withCredentials([string(credentialsId:  'SNYK_TOKEN', variable: 'SNYK_TOKEN')]){
                         echo "<---------------STARTED SCA-SNYK-ANALYSIS--------------->"
                         sh 'mvn snyk:test -fn'
-                        echo "<---------------ENDED SCA-SNYK-ANALYSIS--------------->"
+                        echo "<---------------ENDED SCA-SNYK-ANALYSIS--------------->"  
                     }        
                 }
             }
         }
 
         stage('Build-Docker-Image'){
-            steps{   
-                withDockerRegistry([string(credentialsId: "docker-login", url: "")]){
-                    script{
+            steps{ 
+                script{
+                    withDockerRegistry([string(credentialsId: "docker-login", url: "")]){
                         echo "<---------------STARTED Build-Docker-Image--------------->"
                         app = docker.build("buggy-app")
                         echo "<---------------ENDED Build-Docker-Image--------------->"
@@ -42,8 +42,8 @@ pipeline{
 
         stage('Push-Docker-Image-to-ECR'){
             steps{
-                docker.withRegistry('https://344680520302.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
-                    script{
+                script{
+                    docker.withRegistry('https://344680520302.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
                         "<---------------STARTED Push-Docker-Image-to-ECR--------------->"
                         app.push("v1")
                         "<---------------ENDED Push-Docker-Image-to-ECR--------------->"
