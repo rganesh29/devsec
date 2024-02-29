@@ -31,7 +31,7 @@ pipeline{
         stage('Build-Docker-Image'){
             steps{ 
                 script{
-                    withDockerRegistry([string(credentialsId: "docker-login", url: "")]){
+                    withDockerRegistry([string(credentialsId: "docker-login", url: "https://hub.docker.com")]){
                         echo "<---------------STARTED Build-Docker-Image--------------->"
                         app = docker.build("buggy-app")
                         echo "<---------------ENDED Build-Docker-Image--------------->"
