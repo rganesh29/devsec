@@ -1,38 +1,16 @@
 pipeline{
     agent any
     stages{
-
-        stage('Build-Docker-Image'){
-            steps{ 
-                script{
-                    withDockerRegistry([credentialsId: "docker-login", url: ""]){
-                        echo "<---------------STARTED Build-Docker-Image--------------->"
-                        app = docker.build("buggy-app")
-                        echo "<---------------ENDED Build-Docker-Image--------------->"
-                    }    
-                }
-            }
-        }
         
-        stage('Push-Docker-Image-to-ECR'){
+        stage('Create k8s cluster'){
             steps{
-                script{
-                    docker.withRegistry('https://592640137521.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
-                        "<---------------STARTED Push-Docker-Image-to-ECR--------------->"
-                        app.push("v1")
-                        "<---------------ENDED Push-Docker-Image-to-ECR--------------->"
-                    }
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                    echo "<---------------STARTED CREATING K8S CLUSTER--------------->"
+                    sh 'aws eks update-kubeconfig --name dev --region us-east-1' //optional
+                    sh 'kubectl create ns devsecops'
+                    echo "<---------------ENDED CREATING K8S CLUSTER--------------->"
+          
                 }
-            }
-        }
-
-        stage('Deploy buggy-app on k8s'){
-            steps{
-                echo "<---------------STARTED CREATING NAMESPACE & DEPLOYMENT ON K8S CLUSTER--------------->"
-                sh 'kubectl create ns devsecops'
-                sh 'kubectl delete all --all -n devsecops' //optional (To delete all resources inside the namespace)
-                sh 'kubectl create deployment devsec -n devsecops'
-                echo "<---------------ENDED CREATING NAMESPACE & DEPLOYMENT K8S CLUSTER--------------->"
             }
         }
 
