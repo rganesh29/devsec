@@ -1,11 +1,9 @@
 pipeline{
-    agent {
         agent {
             node {
             label 'jenkins'
             }
         }
-    }
     stages{
         
         stage('Create k8s cluster'){
