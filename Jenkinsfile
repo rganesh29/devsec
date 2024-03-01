@@ -20,7 +20,7 @@ pipeline{
         //To create deployment for deploy buggy-app on k8s.
         stage('Deploy buggy-app on k8s'){
             steps{
-                withkubeConfig([credentialsId: 'kubeconfig-file']){
+                withKubeConfig([credentialsId: 'kubeconfig-file']){
                     dir('/home/ubuntu/'){
                         echo "<---------------STARTED CREATING NAMESPACE & DEPLOYMENT ON K8S CLUSTER--------------->"
                         sh 'kubectl create ns devsecops'
