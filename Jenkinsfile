@@ -1,6 +1,18 @@
 pipeline{
     agent any
     stages{
+
+        stage('Build-Docker-Image'){
+            steps{ 
+                script{
+                    withDockerRegistry([credentialsId: "docker-login", url: ""]){
+                        echo "<---------------STARTED Build-Docker-Image--------------->"
+                        app = docker.build("buggy-app")
+                        echo "<---------------ENDED Build-Docker-Image--------------->"
+                    }    
+                }
+            }
+        }
         
         stage('Push-Docker-Image-to-ECR'){
             steps{
