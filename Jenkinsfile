@@ -43,7 +43,7 @@ pipeline{
         stage('Push-Docker-Image-to-ECR'){
             steps{
                 script{
-                    docker.withRegistry('https://647809485415.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
+                    docker.withRegistry('https://592640137521.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
                         "<---------------STARTED Push-Docker-Image-to-ECR--------------->"
                         app.push("v1")
                         "<---------------ENDED Push-Docker-Image-to-ECR--------------->"
@@ -57,7 +57,7 @@ pipeline{
             steps{
                 withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
                     echo "<---------------STARTED CREATING K8S CLUSTER--------------->"
-                    sh 'eksctl create cluster --name dev --region us-east-1 --zones us-east-1a, us-east-1b --nodegroup-name nodes-dev --node-type t3.medium --nodes 2 --nodes-min 1 --nodes-max 3 --managed'
+                    sh 'eksctl create cluster --name dev --region us-east-1 --zones us-east-1a, us-east-1d --nodegroup-name nodes-dev --node-type t3.medium --nodes 2 --nodes-min 1 --nodes-max 3 --managed'
                     sh 'aws eks update-kubeconfig --name dev --region us-east-1' //optional
                     echo "<---------------ENDED CREATING K8S CLUSTER--------------->"
           
