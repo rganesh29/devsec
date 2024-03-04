@@ -9,6 +9,7 @@ pipeline{
                     withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
                     echo "<---------------STARTED CREATING NAMESPACE & DEPLOYMENT ON K8S CLUSTER--------------->"
                     sh 'aws eks update-kubeconfig --name dev --region us-east-1'
+                    sh 'chmod +x /home/ubuntu/bin/kubectl'
                     sh '/home/ubuntu/bin/kubectl create ns devsecops'
                     }
 
