@@ -8,7 +8,6 @@ pipeline{
                 sh 'chmod +x ./kubectl'
                 // sh 'mkdir /var/lib/jenkins/bin'
                 sh 'echo "export PATH=$HOME/bin:$PATH" >> ~/.bashrc'
-'
             }
         }
     }
