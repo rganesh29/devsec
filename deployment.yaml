@@ -1,0 +1,37 @@
+#Deployment
+
+apiversion: apps/v1
+kind: Deployment
+metadata:
+  name: buggy-deploy
+spec:
+  replicas: 2
+  selector:
+    matchlabels:
+      app: buggy-app
+  template:
+    metadata:
+      labels:
+        app: buggy-app
+    spec:
+      containers:
+      - name: buggy-container
+        image: <ecr-image-link>
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+
+---
+#Service
+
+apiversion: v1
+kind: Service
+metadata: buggy-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: buggy-app
+  port:
+    - name: http
+      port: 80
+      targetport: 8080
