@@ -1,13 +1,13 @@
 #Deployment
 
-apiversion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: buggy-deploy
 spec:
   replicas: 2
   selector:
-    matchlabels:
+    matchLabels:
       app: buggy-app
   template:
     metadata:
@@ -24,14 +24,15 @@ spec:
 ---
 #Service
 
-apiversion: v1
+apiVersion: v1
 kind: Service
-metadata: buggy-svc
+metadata: 
+  name: buggy-svc
 spec:
   type: LoadBalancer
   selector:
     app: buggy-app
-  port:
+  ports:
     - name: http
       port: 80
-      targetport: 8080
+      targetPort: 8080
