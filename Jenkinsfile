@@ -11,7 +11,7 @@ pipeline{
                     sh 'aws eks update-kubeconfig --name dev --region us-east-1' //optional
                     //sh 'kubectl create ns devsecops'
                     sh 'kubectl delete all --all -n devsecops'
-                    sh 'kubectl create deployment devsec -n devsecops'
+                    sh 'kubectl create -f deployment.yaml -n devsecops'
                     echo "<---------------ENDED CREATING K8S CLUSTER--------------->"
           
                 }
