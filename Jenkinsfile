@@ -17,14 +17,6 @@ pipeline{
                         def serviceInfo = sh(script: 'kubectl get svc -o wide -n devsecops', returnStdout: true).trim()
                         echo "kubectl get svc -o wide -n devsecops:"
                         echo serviceInfo
-
-                        // Extracting Load Balancer link
-                        def loadBalancerLink = extractLoadBalancerLink(serviceInfo)
-                        if (loadBalancerLink) {
-                            echo "Load Balancer Link: $loadBalancerLink"
-                        } else {
-                            echo "Load Balancer Link not found"
-                        }
                     }
 
                     echo "<---------------ENDED CREATING K8S CLUSTER--------------->"
