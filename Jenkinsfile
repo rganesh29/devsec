@@ -15,7 +15,7 @@ pipeline{
 
                     script{
                         def serviceInfo = sh(script: 'kubectl get svc -o wide -n devsecops', returnStdout: true).trim()
-                        echo "kubectl get svc -n devsecops:"
+                        echo "kubectl get svc -o wide -n devsecops:"
                         echo serviceInfo
                     }
 
