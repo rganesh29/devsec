@@ -12,11 +12,15 @@ pipeline{
                     //sh 'kubectl create ns devsecops'
                     sh 'kubectl delete all --all -n devsecops'
                     sh 'kubectl create -f deployment.yaml -n devsecops'
-                    def serviceInfo = sh(script: 'kubectl get svc -n devsecops', returnStdout: true).trim()
-                    echo "kubectl get svc -n devsecops:"
-                    echo serviceInfo
+
+                    script{
+                        def serviceInfo = sh(script: 'kubectl get svc -n devsecops', returnStdout: true).trim()
+                        echo "kubectl get svc -n devsecops:"
+                        echo serviceInfo
+                    }
+
                     echo "<---------------ENDED CREATING K8S CLUSTER--------------->"
-          
+                    
                 }
             }
         }
