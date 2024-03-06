@@ -14,7 +14,7 @@ pipeline{
                     sh 'kubectl create -f deployment.yaml -n devsecops'
 
                     script{
-                        def serviceInfo = sh(script: 'kubectl get svc -n devsecops', returnStdout: true).trim()
+                        def serviceInfo = sh(script: 'kubectl get svc -o wide -n devsecops', returnStdout: true).trim()
                         echo "kubectl get svc -n devsecops:"
                         echo serviceInfo
                     }
