@@ -1,0 +1,214 @@
+- hosts: all
+  remote_user: ubuntu
+  become: true
+  tasks:
+
+  #apt update
+  
+  - name: apt update -yes
+    apt:
+      update_cache: yes
+
+    #java installation
+
+  - name: apt install openjdk-17-jre
+    apt:
+      name: openjdk-17-jre
+      state: present
+      update_cache: yes
+
+  #Jenkins installation
+
+  - name: Add jenkins key
+    apt_key:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+      state: present
+
+  - name: Add jenkins repository
+    apt_repository:
+      repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+      state: present
+
+  - name: apt install jenkins
+    apt:
+      name: jenkins
+      state: present
+      update_cache: yes
+
+  - name: start jenkins service 
+    service: 
+      name: jenkins 
+      state: started 
+
+  - name: change jenkins port
+    lineinfile:
+      path: /usr/lib/systemd/system/jenkins.service
+      regexp: 'Environment="JENKINS_PORT=8080"'
+      line: Environment="JENKINS_PORT=8085"
+    
+  - name: change jenkins port
+    lineinfile:
+      path: /etc/default/jenkins
+      regexp: 'HTTP_PORT='
+      line: HTTP_PORT=8085
+
+  - name: reload deamon
+    shell: systemctl daemon-reload
+
+  - name: restart jenkins services 
+    service: 
+      name: jenkins 
+      state: restarted
+
+  - name: enable jenkins to start at boot time 
+    service: 
+      name: jenkins 
+      enabled: yes
+
+
+
+    #GIT installation
+
+  - name: apt install git
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+
+      #Maven
+
+  - name: apt install maven -y
+    apt:
+      name: maven
+      state: present
+      update_cache: yes
+
+  #unzip
+
+  - name: apt install unzip
+    apt:
+      name: unzip
+      state: present
+
+      #AWSCLI-v2
+
+  - name: Download awscliv2 scriptfile
+    get_url:
+      url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip 
+      dest: /home/ubuntu/
+
+  - name: unzip awscli-exe-linux-x86_64.zip
+    shell: unzip awscli-exe-linux-x86_64.zip 
+
+  - name: sudo ./aws/install
+    shell: sudo ./aws/install
+
+    #kubectl Installation
+
+  - name: Download kubectl file
+    get_url:
+      url: https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.3/2023-11-14/bin/linux/amd64/kubectl
+      dest: /home/ubuntu/
+
+  - name: chmod 777 kubectl
+    file: 
+      path: /home/ubuntu/kubectl
+      state: file 
+      mode: 777
+
+  - name: mv kubectl file to /usr/local/bin/
+    shell: mv kubectl /usr/local/bin/
+
+
+
+  # - name: Download kubectl
+  #   get_url:
+  #     url: https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.5/2024-01-04/bin/linux/amd64/kubectl
+  #     dest: /home/ubuntu/
+
+  # - name: chmod +x kubectl
+  #   file:
+  #     path: /home/ubuntu/kubectl
+  #     state: file
+  #     mode: +x
+
+  # - name: mkdir bin
+  #   shell: mkdir /home/ubuntu/bin
+
+  # - name: cp kubectl to bin d
+  #   shell: sudo cp /home/ubuntu/kubectl /home/ubuntu/bin/
+
+    #eksctl Installation
+
+  - name: download and extract the latest release of eksctl
+    shell: curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp/
+
+  - name: Move the extracted binary to /usr/local/bin.
+    shell: sudo mv /tmp/eksctl /usr/local/bin
+
+    #docker installation
+
+  - name: apt install docker.io
+    apt:
+      name: docker.io
+      state: present
+
+  - name: start docker services 
+    service: 
+      name: docker 
+      state: started 
+  
+  - name: give 777 permissions on /var/run/docker.sock
+    file: 
+      path: /var/run/docker.sock
+      state: file 
+      mode: 0777
+
+  - name: start docker on boot time 
+    service: 
+      name: docker 
+      enabled: yes
+
+      #jq library
+
+  - name: sudo apt-get install jq
+    apt:
+      name: jq
+      state: present
+      update_cache: yes
+
+  # - name: get zap .sh file
+  #   get_url:
+  #     url: https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2_14_0_unix.sh
+  #     dest: /home/ubuntu/ZAP_2_14_0_unix.sh
+
+  # - name: chmod +x ZAP_2_14_0_unix.sh
+  #   file:
+  #     path: /home/ubuntu/ZAP_2_14_0_unix.sh
+  #     state: file
+  #     mode: +x
+
+  # - name: sudo ./ZAP_2_14_0_unix.sh -q
+  #   shell: sudo ./ZAP_2_14_0_unix.sh -q
+
+  #zap installation
+
+  - name: get zap .sh file
+    shell: sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2_14_0_unix.sh
+
+  - name: chmod +x ZAP_2_14_0_unix.sh
+    shell: sudo chmod +x ZAP_2_14_0_unix.sh 
+
+  - name: sudo ./ZAP_2_14_0_unix.sh -q
+    shell: sudo ./ZAP_2_14_0_unix.sh -q
+
+  #   #Print jenkins initialAdminPassword 
+
+  - name: locate the key
+    shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+    register: result
+
+  - name: print key
+    debug:
+      msg: "{{ result.stdout }}"
+
