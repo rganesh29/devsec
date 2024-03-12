@@ -29,11 +29,10 @@ kind: Service
 metadata: 
   name: buggy-svc
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: buggy-app
   ports:
     - name: http
       port: 80
       targetPort: 8080
-      NodePort: 32000
