@@ -9,7 +9,7 @@ pipeline{
                     echo "<---------------Deploying-application-on-k8s--------------->"
                     sh 'aws eks update-kubeconfig --name dev --region us-east-1'
                     //sh 'cp ~/.kube/config ~'
-                    sh 'kubectl create ns devsecops'
+                    //sh 'kubectl create ns devsecops'
                     sh 'kubectl delete all --all -n devsecops'
                     sh 'kubectl create -f deployment.yaml -n devsecops'
                     echo "<---------------Deployed-application-on-k8s--------------->"
