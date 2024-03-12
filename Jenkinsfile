@@ -44,7 +44,7 @@ pipeline{
         stage('Push-Docker-Image-to-ECR'){
             steps{
                 script{
-                    docker.withRegistry('https://836852061848.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
+                    docker.withRegistry('https://749006184614.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:aws-credentials'){
                         "<---------------STARTED Push-Docker-Image-to-ECR--------------->"
                         app.push("v1")
                         "<---------------ENDED Push-Docker-Image-to-ECR--------------->"
