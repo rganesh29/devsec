@@ -89,8 +89,7 @@ pipeline{
                         def serviceInfo = sh(script: 'kubectl get svc -n devsecops', returnStdout: true).trim()
                         echo "kubectl get svc -o wide -n devsecops:"
                         echo serviceInfo
-                        sh('zap.sh -cmd -quickurl http://$(kubectl get services/buggy-svc -n devsecops -o json | jq -r ".status.loadBalancer.ingress[] | .hostname") -quickprogress -quickout ${WORKSPACE}/zap_report.html')
-                        archiveArtifacts artifacts: 'zap_report.html'
+                        sh('zap.sh -cmd -quickurl http://$(kubectl get services/buggy-svc -n devsecops -o json | jq -r ".status.loadBalancer.ingress[] | .hostname") -quickprogress -quickout ${WORKSPACE}/zap_report.html')'
                         echo "<---------------Ended-ZAP-DAST-Scan--------------->"
                     }
                     
