@@ -15,7 +15,7 @@ pipeline{
                 //     sh 'kubectl create -f deployment.yaml -n devsecops'
                 //     echo "<---------------Deployed-application-on-k8s--------------->"
                     script{
-                        sleep time: 2, unit: 'MINUTES'
+                        //sleep time: 2, unit: 'MINUTES'
                         //Running DAST-scan on deployed application on kubernetes.
                         echo "<---------------Started-ZAP-DAST-Scan--------------->"
                         def serviceInfo = sh(script: 'kubectl get svc -n devsecops', returnStdout: true).trim()
