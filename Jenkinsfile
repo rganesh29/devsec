@@ -58,7 +58,7 @@ pipeline{
                 withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
                     echo "<---------------STARTED CREATING K8S CLUSTER--------------->"
                     sh 'eksctl create cluster --name dev --region us-east-1 --zones us-east-1a,us-east-1d --nodegroup-name nodes-dev --node-type t3.medium --nodes 2 --nodes-min 1 --nodes-max 3 --managed'
-                    sh 'touch kubeconfig'
+                    //sh 'touch kubeconfig'
                     //After k8s-cluster created Login to the server copy the .kube/config file and 
                     //Add that file in jenkins credentials(secret file).
                 }
