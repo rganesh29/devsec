@@ -6,7 +6,7 @@ pipeline{
 
         stage('Deploy-buggy-app-on-k8s'){
             steps{
-                // withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
                 //     echo "<---------------Deploying-application-on-k8s--------------->"
                 //     sh 'aws eks update-kubeconfig --name dev --region us-east-1'
                 //     //sh 'cp ~/.kube/config ~'
@@ -25,7 +25,7 @@ pipeline{
                         echo "<---------------Ended-ZAP-DAST-Scan--------------->"
                     }
                     
-
+                }
                 
             }
         }
